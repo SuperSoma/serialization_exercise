@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "buffer.h"
 #include "data.h"
+#include "bigdata.h"
 
 int main(int argc, char **argv) {
 
@@ -13,10 +14,17 @@ int main(int argc, char **argv) {
   dd.a = 1;
   dd.b = 2;
 
+  BigData bd;
+  bd.a = d;
+  bd.b = dd;
+
+  printf("D a: %d b: %d\n", bd.a.a, bd.a.b);
+  printf("D a: %d b: %d\n", bd.b.a, bd.b.b);
+
   Buffer *buf = buffer_new();
   printf("Size of Buffer: %d\n", buf->size);
 
-  serialize_data(buf, &d);
+  serialize_bigdata(buf, &bd);
 
   printf("Size of Buffer: %d\n", buf->size);
 
@@ -27,9 +35,10 @@ int main(int argc, char **argv) {
   }
 
   buf->next = 0; //reset offset counter for the example. normally would load into buffer from storage and then start deserialization
-  deserialize_data(buf, &dd);
+  deserialize_bigdata(buf, &bd);
 
-  printf("\nD2 a: %d b: %d", dd.a, dd.b);
+  printf("\nD a: %d b: %d\n", bd.a.a, bd.a.b);
+  printf("D a: %d b: %d\n", bd.b.a, bd.b.b);
 
   return 0;
 }
